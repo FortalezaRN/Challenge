@@ -1,8 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import { numbersSlice } from '../ducks/PhonesSlices';
+import { filteringSlice } from '../ducks/FilteringSlice';
 
-export default configureStore({
+const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    numbers: numbersSlice.reducer,
+    filtering: filteringSlice.reducer,
   },
 });
+
+window.store = store;
+
+export default store;
