@@ -3,7 +3,6 @@ import Container from 'react-bootstrap/Container';
 
 import Home from './pages/Home'
 
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {

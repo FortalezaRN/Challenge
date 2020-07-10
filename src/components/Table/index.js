@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
-import { Table as BootTable, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Table as BootTable, Row, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { retrieveNumbers } from '../../ducks/PhonesSlices';
+import { ModalInfo } from '../index';
+import { retrieveNumbers } from '../../ducks/numbers';
 
 import './Table.css';
 
@@ -10,43 +11,57 @@ const Table = () => {
   const dispatch = useDispatch();
 
   const {
-    items: numbers,
+    currentPage,
+    pages
   } = useSelector(state => state.numbers);
 
-  const numbersList = useSelector(state => state.filtering);
-  
+  const [show, setShow] = useState(false);
+  const [dataModal, setDataModal] = useState({});
+
   useEffect(() => {
     dispatch(retrieveNumbers());
   }, [dispatch]);
 
-  const filteredNumbers = numbers.filter(val => val.value.includes(numbersList.number));
+  function openModaInfo(numberInfo) {
+    setDataModal(numberInfo);
+    setShow(true)
+  }
 
   return(
     <Row className="justify-content-md-center">
-      <Col className="table-phone">
-        <BootTable striped bordered hover>
+      <Col className="table-numbers">
+        <BootTable striped bordered className="text-center">
           <thead>
             <tr>
-              <th>Número</th>
-              <th>Preço por Mês</th>
-              <th>Preço Instalação</th>
-              <th>Moeda</th>
+              <th>Number</th>
+              <th>Monthly price</th>
+              <th>Setup price</th>
+              <th>Currency</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {
-              filteredNumbers.map(number => (
+            { pages.length > 0 &&
+              pages[currentPage].map(number => (
                 <tr key={number.id}>
                   <td>{number.value}</td>
                   <td>{number.monthyPrice}</td>
                   <td>{number.setupPrice}</td>
                   <td>{number.currency}</td>
+                  <td className="td-btn-infos">
+                    <Button onClick={() => openModaInfo(number)}>
+                      Show infos
+                    </Button>
+                  </td>
                 </tr>
               ))
             }
           </tbody>
         </BootTable>
       </Col>
+      { show && 
+        <ModalInfo show={show} closeModal={setShow} data={dataModal} />
+      }
     </Row>
   )
 }

@@ -1,28 +1,22 @@
 import React, { useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import chunk from 'lodash.chunk';
-import { useDispatch, useSelector } from 'react-redux';
+import { Container, Row, Col, Alert } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { retrieveNumbers } from '../../ducks/PhonesSlices';
+import { setAddSucess } from '../../ducks/numbers';
+import { Form, Table, Loading, Pagination } from '../../components';
 
-import { Form, Table, Loading } from '../../components'
+import './Home.css';
 
 const Home = () => {
-
   const dispatch = useDispatch();
-
   const {
     isLoading,
-    isError,
-    items: numbers,
+    isAddSucess
   } = useSelector(state => state.numbers);
 
-  const numbersList = useSelector(state => state.filtering);
-  // const [selectedNumberId, setSelectedNumberId] = React.useState(null);
-  
   useEffect(() => {
-    dispatch(retrieveNumbers());
-  }, [dispatch]);
+    setTimeout(() => dispatch(setAddSucess()), 2000);
+  }, [dispatch, isAddSucess]);
 
  
   return(
@@ -30,19 +24,21 @@ const Home = () => {
       <Row>
         <Col>
           <Container as="header">
-            <h1>Seu número</h1>
+            <h1>Get Your Number</h1>
           </Container>
         </Col>
       </Row>
       <Container as="main">
-          <Row className="justify-content-md-center">
-            <Col>
-              <Form />
-            </Col>
-          </Row>
-          <Table />
+        <Form />
+        <Table />
+        <Pagination />
       </Container>
       { isLoading && <Loading />}
+      { isAddSucess && 
+        <Alert className="alert-sucess-add" variant="success">
+          New number successfully registered
+        </Alert>
+      }
     </div>
   );
 }

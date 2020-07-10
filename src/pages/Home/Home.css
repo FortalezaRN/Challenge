@@ -1,0 +1,9 @@
+.alert-sucess-add{
+  position: fixed !important;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 310px;
+  text-align: center;
+}

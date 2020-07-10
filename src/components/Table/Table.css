@@ -1,3 +1,32 @@
-.table-phone{
-  overflow-x: auto;
+@media only screen and (max-width: 510px){
+  .table-numbers th:nth-child(2n) {
+    display: none;
+  }
+
+  .table-numbers td:nth-child(2n) {
+    display: none;
+  }
+}
+@media only screen and (max-width: 767px){
+  .table-numbers th:nth-child(4n), .table-numbers th:nth-child(3n) {
+    display: none;
+  }
+
+  .table-numbers td:nth-child(4n), .table-numbers td:nth-child(3n) {
+    display: none;
+  }
+  .table-numbers th:nth-child(5n) {
+    display: table-cell;
+  }
+  .td-btn-infos{
+    display: table-cell;
+  }
+}
+@media only screen and (min-width: 768px){
+  .table-numbers th:nth-child(5n) {
+    display: none;
+  }
+  .table-numbers .td-btn-infos{
+    display: none;
+  }
 }
