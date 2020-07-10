@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Form, Modal, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 
-import { addNewNumber } from '../../ducks/numbers';
+import { addNewNumber, editNewNumber } from '../../ducks/numbers';
 
-const Add = ({show, closeModal}) => {
+const Add = ({show, closeModal, data}) => {
 
   const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState({
-    value: "",
-    monthyPrice: "",
-    setupPrice: "",
-    currency: ""
-  });
+  const [formData, setFormData] = useState(data);
 
 
   const handleNameChange = (event) => {
@@ -27,7 +23,10 @@ const Add = ({show, closeModal}) => {
   }
 
   function handleSave(){
-    dispatch(addNewNumber(formData));
+    if(data.id)
+      dispatch(editNewNumber(formData));
+    else
+      dispatch(addNewNumber(formData));
     closeModal(false);
   }
 
@@ -78,6 +77,21 @@ const Add = ({show, closeModal}) => {
       </Modal.Footer>
     </Modal>
   );
+};
+
+Add.defaultProps = {
+  data: {
+    value: "",
+    monthyPrice: "",
+    setupPrice: "",
+    currency: ""
+  }
+};
+
+Add.propTypes = {
+  show: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  data: PropTypes.object,
 };
 
 export default Add;

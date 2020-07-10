@@ -17,7 +17,6 @@ const NumberFilter = () => {
 
   const handleNameChange = (event) => {
     // dispatch(setFilterNumber(event.target.value)); //when the api came
-    console.log("olha o numbers", numbers)
     dispatch(setPages(numbers.filter(val => val.value.includes(event.target.value))));
     dispatch(setCurrentPage(0));
   };

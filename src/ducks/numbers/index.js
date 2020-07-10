@@ -15,6 +15,7 @@ export const numberReducer = createSlice({
     pages: [],
     items: [],
     isAddSucess:false,
+    isEditSucess:false,
     isRemoveSucess:false,
   },
   reducers: {
@@ -53,6 +54,36 @@ export const numberReducer = createSlice({
       state.pages = chunk(newItems.items, 3);
       state.isAddSucess = true;
     },
+    editNewNumber: (state, action) =>{
+      const itemEdited = action.payload;
+      if(localStorage.getItem('listEditedItems') !== null) {
+        const listEditedItems = JSON.parse(localStorage.getItem('listEditedItems'))
+        const searchItem = listEditedItems.find(el => el.id === itemEdited.id);
+        
+        if(searchItem){
+            const listUpdate = listEditedItems.map(number =>{
+              if(number.id === itemEdited.id)
+                return {...number, ...itemEdited};
+              return number
+          });
+          localStorage.setItem('listEditedItems', JSON.stringify(listUpdate));
+        }
+        else
+          localStorage.setItem('listEditedItems', JSON.stringify([...listEditedItems, itemEdited]));
+        
+        
+      } else {
+        localStorage.setItem('listEditedItems', JSON.stringify([itemEdited]));
+      }
+      const itemsEditeds = state.items.map(number =>{
+        if(number.id === itemEdited.id)
+          return {...number, ...itemEdited};
+        return number
+      });
+      state.items = itemsEditeds;
+      state.pages = chunk(itemsEditeds, 3);
+      state.isEditSucess = true;
+    },
     deleteNumber: (state, action) =>{
       const idItem = action.payload;
       if(localStorage.getItem('deleteItems') !== null) {
@@ -69,6 +100,9 @@ export const numberReducer = createSlice({
     setAddSucess: (state) => {
       state.isAddSucess = false;
     },
+    setEditSucess: (state) => {
+      state.isEditSucess = false;
+    },
     setRemoveSucess: (state) => {
       state.isRemoveSucess = false;
     }
@@ -76,7 +110,7 @@ export const numberReducer = createSlice({
 });
 
 const { setNumberSuccess, setNumberLoading, setNumberError } = numberReducer.actions;
-export const { setFilterNumber, setPages, setCurrentPage, addNewNumber, setAddSucess, deleteNumber, setRemoveSucess } = numberReducer.actions;
+export const { setFilterNumber, setPages, setCurrentPage, addNewNumber, setAddSucess, deleteNumber, setRemoveSucess, setEditSucess, editNewNumber } = numberReducer.actions;
 
 export const retrieveNumbers = () => (dispatch) => {
   dispatch(setNumberLoading());
@@ -92,8 +126,15 @@ export const retrieveNumbers = () => (dispatch) => {
         const deletedItems = JSON.parse(localStorage.getItem('deleteItems'))
         itemsLocalStorage = itemsLocalStorage.filter(number => !deletedItems.includes(number.id))
       }
-
-      console.log(itemsLocalStorage)
+      if(localStorage.getItem('listEditedItems') !== null){
+        const listEditedItems = JSON.parse(localStorage.getItem('listEditedItems'))
+        itemsLocalStorage = itemsLocalStorage.map(number =>{
+          const searchItem = listEditedItems.find(el => el.id === number.id);
+          if(!!searchItem)
+            return {...number, ...searchItem};
+          return number
+        });
+      }
       dispatch(setNumberSuccess(itemsLocalStorage));
       dispatch(setPages(itemsLocalStorage));
     }).catch(() => dispatch(setNumberError()));

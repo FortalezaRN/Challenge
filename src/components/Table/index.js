@@ -3,7 +3,7 @@ import { Table as BootTable, Row, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaEye, FaTrash, FaPen } from 'react-icons/fa';
 
-import { ModalInfo } from '../index';
+import { ModalInfo, Add } from '../index';
 import { retrieveNumbers, deleteNumber } from '../../ducks/numbers';
 
 import './Table.css';
@@ -17,6 +17,7 @@ const Table = () => {
   } = useSelector(state => state.numbers);
 
   const [show, setShow] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [dataModal, setDataModal] = useState({});
 
   useEffect(() => {
@@ -30,6 +31,12 @@ const Table = () => {
 
   function removeNumber(id) {
     dispatch(deleteNumber(id));
+  }
+  
+  function editNumber(number) {
+    setDataModal(number);
+    setShowEditModal(true);
+    // dispatch(deleteNumber(id));
   }
 
   return(
@@ -47,8 +54,7 @@ const Table = () => {
           </thead>
           <tbody>
             { pages.length > 0 &&
-              pages[currentPage].map(number =>{ 
-                console.log(number)
+              pages[currentPage].map(number =>{
                 return(
                 <tr key={number.id}>
                   <td>{number.value}</td>
@@ -61,16 +67,16 @@ const Table = () => {
                         <FaEye size={16} color="#FFF" aria-label="View Infos"/>
                       </div>
                     </Button>
-                    <Button variant="danger" onClick={() => removeNumber(number.id)} className="mr-1">
+                    <Button variant="success" onClick={() => editNumber(number)} className="mr-1">
+                      <div className="d-flex align-items-center">
+                        <FaPen size={16} color="#FFF" aria-label="View Infos"/>
+                      </div>
+                    </Button>
+                    <Button variant="danger" onClick={() => removeNumber(number.id)}>
                       <div className="d-flex align-items-center">
                         <FaTrash size={16} color="#FFF" aria-label="Delete number"/>
                       </div>
                     </Button>
-                    {/* <Button variant="success" onClick={() => {}}>
-                      <div className="d-flex align-items-center">
-                        <FaPen size={16} color="#FFF" aria-label="View Infos"/>
-                      </div>
-                    </Button> */}
                   </td>
                 </tr>
               )})
@@ -81,6 +87,8 @@ const Table = () => {
       { show && 
         <ModalInfo show={show} closeModal={setShow} data={dataModal} />
       }
+      { showEditModal && <Add show={showEditModal} closeModal={setShowEditModal} data={dataModal} />}
+
     </Row>
   )
 }
