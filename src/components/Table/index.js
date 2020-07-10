@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table as BootTable, Row, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaEye, FaTrash } from 'react-icons/fa';
+import { FaEye, FaTrash, FaPen } from 'react-icons/fa';
 
 import { ModalInfo } from '../index';
 import { retrieveNumbers, deleteNumber } from '../../ducks/numbers';
@@ -63,9 +63,14 @@ const Table = () => {
                     </Button>
                     <Button variant="danger" onClick={() => removeNumber(number.id)} className="mr-1">
                       <div className="d-flex align-items-center">
-                        <FaTrash size={16} color="#FFF" aria-label="View Infos"/>
+                        <FaTrash size={16} color="#FFF" aria-label="Delete number"/>
                       </div>
                     </Button>
+                    {/* <Button variant="success" onClick={() => {}}>
+                      <div className="d-flex align-items-center">
+                        <FaPen size={16} color="#FFF" aria-label="View Infos"/>
+                      </div>
+                    </Button> */}
                   </td>
                 </tr>
               )})
