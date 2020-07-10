@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Container, Row, Col, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setAddSucess } from '../../ducks/numbers';
+import { setAddSucess, setRemoveSucess } from '../../ducks/numbers';
 import { Form, Table, Loading, Pagination } from '../../components';
 
 import './Home.css';
@@ -11,12 +11,13 @@ const Home = () => {
   const dispatch = useDispatch();
   const {
     isLoading,
-    isAddSucess
+    isAddSucess,
+    isRemoveSucess
   } = useSelector(state => state.numbers);
 
   useEffect(() => {
-    setTimeout(() => dispatch(setAddSucess()), 2000);
-  }, [dispatch, isAddSucess]);
+    setTimeout(() =>{dispatch(setAddSucess()); dispatch(setRemoveSucess()); }, 2000);
+  }, [dispatch, isAddSucess, isRemoveSucess]);
 
  
   return(
@@ -37,6 +38,11 @@ const Home = () => {
       { isAddSucess && 
         <Alert className="alert-sucess-add" variant="success">
           New number successfully registered
+        </Alert>
+      }
+      { isRemoveSucess && 
+        <Alert className="alert-sucess-add" variant="success">
+          Number was deleted
         </Alert>
       }
     </div>

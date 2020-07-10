@@ -18,15 +18,4 @@
   .table-numbers th:nth-child(5n) {
     display: table-cell;
   }
-  .td-btn-infos{
-    display: table-cell;
-  }
-}
-@media only screen and (min-width: 768px){
-  .table-numbers th:nth-child(5n) {
-    display: none;
-  }
-  .table-numbers .td-btn-infos{
-    display: none;
-  }
 }

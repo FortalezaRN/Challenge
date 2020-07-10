@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Table as BootTable, Row, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { FaEye, FaTrash } from 'react-icons/fa';
 
 import { ModalInfo } from '../index';
-import { retrieveNumbers } from '../../ducks/numbers';
+import { retrieveNumbers, deleteNumber } from '../../ducks/numbers';
 
 import './Table.css';
 
@@ -27,6 +28,10 @@ const Table = () => {
     setShow(true)
   }
 
+  function removeNumber(id) {
+    dispatch(deleteNumber(id));
+  }
+
   return(
     <Row className="justify-content-md-center">
       <Col className="table-numbers">
@@ -42,19 +47,28 @@ const Table = () => {
           </thead>
           <tbody>
             { pages.length > 0 &&
-              pages[currentPage].map(number => (
+              pages[currentPage].map(number =>{ 
+                console.log(number)
+                return(
                 <tr key={number.id}>
                   <td>{number.value}</td>
                   <td>{number.monthyPrice}</td>
                   <td>{number.setupPrice}</td>
                   <td>{number.currency}</td>
                   <td className="td-btn-infos">
-                    <Button onClick={() => openModaInfo(number)}>
-                      Show infos
+                    <Button onClick={() => openModaInfo(number)} className="mr-1">
+                      <div className="d-flex align-items-center">
+                        <FaEye size={16} color="#FFF" aria-label="View Infos"/>
+                      </div>
+                    </Button>
+                    <Button variant="danger" onClick={() => removeNumber(number.id)} className="mr-1">
+                      <div className="d-flex align-items-center">
+                        <FaTrash size={16} color="#FFF" aria-label="View Infos"/>
+                      </div>
                     </Button>
                   </td>
                 </tr>
-              ))
+              )})
             }
           </tbody>
         </BootTable>
